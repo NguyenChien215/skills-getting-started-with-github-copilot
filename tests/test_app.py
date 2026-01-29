@@ -84,14 +84,7 @@ def test_signup_when_activity_full():
     # Use Tennis Club which has max_participants of 10
     activity = "Tennis Club"
     
-    # Fill up the activity to max capacity
-    for i in range(10):
-        email = f"student{i}@mergington.edu"
-        # First remove any existing participants
-        if email in activities[activity]["participants"]:
-            activities[activity]["participants"].remove(email)
-    
-    # Reset and add exactly max_participants
+    # Fill the activity to max capacity
     activities[activity]["participants"] = [f"student{i}@mergington.edu" for i in range(10)]
     
     # Try to add one more
