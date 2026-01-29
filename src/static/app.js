@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const spotsLeft = details.max_participants - details.participants.length;
 
-        // Tạo HTML danh sách người tham gia
+        // Create participants list HTML
         const participants = Array.isArray(details.participants) ? details.participants : [];
         const participantsHTML = participants.length
           ? `<ul class="participants-list">${participants.map(p => `
