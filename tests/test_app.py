@@ -78,3 +78,39 @@ def test_unregister_nonexistent_is_404():
     resp = client.delete(f"/activities/{activity}/signup", params={"email": email})
     assert resp.status_code == 404
     assert resp.json()["detail"] == "Student not registered for this activity"
+
+
+def test_signup_when_activity_full():
+    # Use Tennis Club which has max_participants of 10
+    activity = "Tennis Club"
+    
+    # Fill the activity to max capacity using the API
+    for i in range(10):
+        email = f"student{i}@mergington.edu"
+        # Remove the default participant first if needed
+        if i == 0 and activities[activity]["participants"]:
+            activities[activity]["participants"].clear()
+        client.post(f"/activities/{activity}/signup", params={"email": email})
+    
+    # Try to add one more
+    resp = client.post(f"/activities/{activity}/signup", params={"email": "overflow@mergington.edu"})
+    assert resp.status_code == 400
+    assert resp.json()["detail"] == "Activity is full"
+
+
+def test_signup_nonexistent_activity():
+    email = "newstudent@mergington.edu"
+    activity = "NonExistentActivity"
+
+    resp = client.post(f"/activities/{activity}/signup", params={"email": email})
+    assert resp.status_code == 404
+    assert resp.json()["detail"] == "Activity not found"
+
+
+def test_unregister_from_nonexistent_activity():
+    email = "student@mergington.edu"
+    activity = "NonExistentActivity"
+
+    resp = client.delete(f"/activities/{activity}/signup", params={"email": email})
+    assert resp.status_code == 404
+    assert resp.json()["detail"] == "Activity not found"
