@@ -84,8 +84,13 @@ def test_signup_when_activity_full():
     # Use Tennis Club which has max_participants of 10
     activity = "Tennis Club"
     
-    # Fill the activity to max capacity
-    activities[activity]["participants"] = [f"student{i}@mergington.edu" for i in range(10)]
+    # Fill the activity to max capacity using the API
+    for i in range(10):
+        email = f"student{i}@mergington.edu"
+        # Remove the default participant first if needed
+        if i == 0 and activities[activity]["participants"]:
+            activities[activity]["participants"].clear()
+        client.post(f"/activities/{activity}/signup", params={"email": email})
     
     # Try to add one more
     resp = client.post(f"/activities/{activity}/signup", params={"email": "overflow@mergington.edu"})
