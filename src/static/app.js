@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
 
-  // Escape HTML để tránh chèn mã độc trong tên/email
+  // Escape HTML to prevent code injection in names/emails
   function escapeHTML(str) {
     return String(str).replace(/[&<>"']/g, (m) => ({
       "&": "&amp;",
